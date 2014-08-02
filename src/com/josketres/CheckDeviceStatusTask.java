@@ -13,7 +13,6 @@ public class CheckDeviceStatusTask extends
 		AsyncTask<String, Void, DeviceStatus> {
 
 	private final MainActivity gui;
-	private AndroidHttpClient httpClient = AndroidHttpClient.newInstance("");
 
 	public CheckDeviceStatusTask(MainActivity mainActivity) {
 		gui = mainActivity;
@@ -27,14 +26,18 @@ public class CheckDeviceStatusTask extends
 		String url = "http://" + host + "/api/device/" + deviceId;
 		Log.i(MainActivity.TAG, "GET: " + url);
 		HttpGet request = new HttpGet(url);
+		AndroidHttpClient httpClient = AndroidHttpClient.newInstance("");
 		try {
-			return httpClient.execute(request, new GetDeviceStatusResponseHandler());
+			return httpClient.execute(request,
+					new GetDeviceStatusResponseHandler());
 		} catch (ClientProtocolException e) {
 			Log.e(MainActivity.TAG, e.getMessage());
 			e.printStackTrace();
 		} catch (IOException e) {
 			Log.e(MainActivity.TAG, e.getMessage());
 			e.printStackTrace();
+		} finally {
+			httpClient.close();
 		}
 		return DeviceStatus.NOT_REGISTERED;
 	}

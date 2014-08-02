@@ -12,7 +12,6 @@ import android.util.Log;
 public class ReturnDeviceTask extends AsyncTask<String, Void, Void> {
 
 	private final MainActivity gui;
-	private AndroidHttpClient httpClient = AndroidHttpClient.newInstance("");
 
 	public ReturnDeviceTask(MainActivity gui) {
 		this.gui = gui;
@@ -26,6 +25,7 @@ public class ReturnDeviceTask extends AsyncTask<String, Void, Void> {
 				deviceId);
 		Log.i(MainActivity.TAG, "DELETE: " + url);
 		HttpDelete request = new HttpDelete(url);
+		AndroidHttpClient httpClient = AndroidHttpClient.newInstance("");
 		try {
 			httpClient.execute(request);
 		} catch (ClientProtocolException e) {
@@ -34,6 +34,8 @@ public class ReturnDeviceTask extends AsyncTask<String, Void, Void> {
 		} catch (IOException e) {
 			Log.e(MainActivity.TAG, e.getMessage());
 			e.printStackTrace();
+		} finally {
+			httpClient.close();
 		}
 		return null;
 	}

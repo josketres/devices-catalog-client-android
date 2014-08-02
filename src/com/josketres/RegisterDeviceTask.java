@@ -13,7 +13,6 @@ import android.util.Log;
 public class RegisterDeviceTask extends AsyncTask<String, Void, Void> {
 
 	private final MainActivity gui;
-	private AndroidHttpClient httpClient = AndroidHttpClient.newInstance("");
 
 	public RegisterDeviceTask(MainActivity gui) {
 		this.gui = gui;
@@ -27,6 +26,7 @@ public class RegisterDeviceTask extends AsyncTask<String, Void, Void> {
 		String url = "http://" + host + "/api/device";
 		Log.i(MainActivity.TAG, "POST: " + url);
 		Log.i(MainActivity.TAG, "POST-BODY: " + json);
+		AndroidHttpClient httpClient = AndroidHttpClient.newInstance("");
 		try {
 			HttpPost request = new HttpPost(url);
 			request.setHeader("Accept", "application/json");
@@ -39,6 +39,8 @@ public class RegisterDeviceTask extends AsyncTask<String, Void, Void> {
 		} catch (IOException e) {
 			Log.e(MainActivity.TAG, e.getMessage());
 			e.printStackTrace();
+		} finally {
+			httpClient.close();
 		}
 		return null;
 	}

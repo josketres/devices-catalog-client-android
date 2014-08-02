@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Devices Catalog Client</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="register_device">Register Device</string>
+    <string name="borrow_device">Borrow Device</string>
+    <string name="return_device">Return Device</string>
+
+</resources>

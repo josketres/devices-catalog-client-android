@@ -22,7 +22,9 @@ public class BorrowDeviceTask extends AsyncTask<String, Void, Void> {
 	protected Void doInBackground(String... params) {
 		String host = params[0];
 		String deviceId = params[1];
-		String json = "{ \"name\" : \"Josue\" }";
+		String borrowerName = params[2];
+		
+		String json = String.format("{ \"name\" : \"%s\" }", borrowerName);
 		String url = String.format("http://%s/api/device/%s/borrower", host,
 				deviceId);
 		Log.i(MainActivity.TAG, "POST: " + url);

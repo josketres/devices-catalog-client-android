@@ -1,21 +1,25 @@
 package com.josketres;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Editable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class MainActivity extends ActionBarActivity {
 
 	static final String TAG = "DevicesCatalogClient";
 
-	private static final String SERVER_HOST = "192.168.2.102:8000";
+	private static final String SERVER_HOST = "devstation19.office.tipp24.de:8000";
 
 	private TextView text;
 	private ProgressDialog loading;
@@ -44,9 +48,7 @@ public class MainActivity extends ActionBarActivity {
 
 			@Override
 			public void onClick(View v) {
-				loading.show();
-				new RegisterDeviceTask(MainActivity.this).execute(SERVER_HOST,
-						deviceId);
+				registerDevice(deviceId);
 			}
 		});
 
@@ -54,9 +56,7 @@ public class MainActivity extends ActionBarActivity {
 
 			@Override
 			public void onClick(View v) {
-				loading.show();
-				new BorrowDeviceTask(MainActivity.this).execute(SERVER_HOST,
-						deviceId);
+				borrowDevice(deviceId);
 			}
 		});
 
@@ -69,8 +69,56 @@ public class MainActivity extends ActionBarActivity {
 						deviceId);
 			}
 		});
-		
+
 		checkDeviceStatus();
+	}
+
+	private void registerDevice(final String deviceId) {
+
+		final EditText input = new EditText(MainActivity.this);
+		new AlertDialog.Builder(MainActivity.this)
+				.setTitle("Register device")
+				.setMessage("Enter device name:")
+				.setView(input)
+				.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						Editable deviceName = input.getText();
+						loading.show();
+						new RegisterDeviceTask(MainActivity.this).execute(
+								SERVER_HOST, deviceId, deviceName.toString());
+					}
+				})
+				.setNegativeButton("Cancel",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+								// Do nothing.
+							}
+						}).show();
+	}
+
+	private void borrowDevice(final String deviceId) {
+
+		final EditText input = new EditText(MainActivity.this);
+		new AlertDialog.Builder(MainActivity.this)
+				.setTitle("Borrow device")
+				.setMessage("Enter borrower's name:")
+				.setView(input)
+				.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						Editable borrowerName = input.getText();
+						loading.show();
+						new BorrowDeviceTask(MainActivity.this).execute(
+								SERVER_HOST, deviceId, borrowerName.toString());
+					}
+				})
+				.setNegativeButton("Cancel",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+								// Do nothing.
+							}
+						}).show();
 	}
 
 	@Override

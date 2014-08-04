@@ -22,7 +22,9 @@ public class RegisterDeviceTask extends AsyncTask<String, Void, Void> {
 	protected Void doInBackground(String... params) {
 		String host = params[0];
 		String deviceId = params[1];
-		String json = String.format("{ \"id\" : \"%s\" }", deviceId);
+		String deviceName = params[2];
+		
+		String json = String.format("{ \"id\" : \"%s\", \"name\" : \"%s\" }", deviceId, deviceName);
 		String url = "http://" + host + "/api/device";
 		Log.i(MainActivity.TAG, "POST: " + url);
 		Log.i(MainActivity.TAG, "POST-BODY: " + json);

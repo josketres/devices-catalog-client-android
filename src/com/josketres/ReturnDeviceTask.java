@@ -43,7 +43,7 @@ public class ReturnDeviceTask extends AsyncTask<String, Void, Void> {
 	@Override
 	protected void onPostExecute(Void result) {
 		super.onPostExecute(result);
-		gui.checkDeviceStatus();
+		gui.getDeviceStatus();
 	}
 
 }

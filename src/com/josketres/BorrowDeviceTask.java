@@ -23,13 +23,13 @@ public class BorrowDeviceTask extends AsyncTask<String, Void, Void> {
 		String host = params[0];
 		String deviceId = params[1];
 		String borrowerName = params[2];
-		
+
 		String json = String.format("{ \"name\" : \"%s\" }", borrowerName);
 		String url = String.format("http://%s/api/device/%s/borrower", host,
 				deviceId);
 		Log.i(MainActivity.TAG, "POST: " + url);
 		Log.i(MainActivity.TAG, "POST-BODY: " + json);
-		
+
 		AndroidHttpClient httpClient = AndroidHttpClient.newInstance("");
 		try {
 			HttpPost request = new HttpPost(url);
@@ -52,6 +52,6 @@ public class BorrowDeviceTask extends AsyncTask<String, Void, Void> {
 	@Override
 	protected void onPostExecute(Void result) {
 		super.onPostExecute(result);
-		gui.checkDeviceStatus();
+		gui.getDeviceStatus();
 	}
 }

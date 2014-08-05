@@ -12,30 +12,39 @@
         android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:textSize="18sp"
+         />
 
     <Button
         android:id="@+id/registerButton"
-        android:layout_width="wrap_content"
+		android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/text"
         android:text="@string/register_device"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:textSize="25sp"
+         />
 
     <Button
         android:id="@+id/borrowButton"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/text"
         android:text="@string/borrow_device"
-        android:visibility="invisible" />
+        android:visibility="invisible" 
+        android:textSize="25sp"
+        />
 
     <Button
         android:id="@+id/returnButton"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/text"
         android:text="@string/return_device"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:textSize="25sp"
+         />
 
 </RelativeLayout>

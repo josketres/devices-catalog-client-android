@@ -9,17 +9,16 @@ import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class CheckDeviceStatusTask extends
-		AsyncTask<String, Void, DeviceStatus> {
+public class GetDeviceTask extends AsyncTask<String, Void, Device> {
 
 	private final MainActivity gui;
 
-	public CheckDeviceStatusTask(MainActivity mainActivity) {
+	public GetDeviceTask(MainActivity mainActivity) {
 		gui = mainActivity;
 	}
 
 	@Override
-	protected DeviceStatus doInBackground(String... params) {
+	protected Device doInBackground(String... params) {
 
 		String host = params[0];
 		String deviceId = params[1];
@@ -28,8 +27,7 @@ public class CheckDeviceStatusTask extends
 		HttpGet request = new HttpGet(url);
 		AndroidHttpClient httpClient = AndroidHttpClient.newInstance("");
 		try {
-			return httpClient.execute(request,
-					new GetDeviceStatusResponseHandler());
+			return httpClient.execute(request, new GetDeviceResponseHandler());
 		} catch (ClientProtocolException e) {
 			Log.e(MainActivity.TAG, e.getMessage());
 			e.printStackTrace();
@@ -39,13 +37,13 @@ public class CheckDeviceStatusTask extends
 		} finally {
 			httpClient.close();
 		}
-		return DeviceStatus.NOT_REGISTERED;
+		return null;
 	}
 
 	@Override
-	protected void onPostExecute(DeviceStatus result) {
-		super.onPostExecute(result);
-		gui.updateDeviceStatus(result);
+	protected void onPostExecute(Device device) {
+		super.onPostExecute(device);
+		gui.updateDeviceInfo(device);
 	}
 
 }

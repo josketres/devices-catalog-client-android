@@ -29,6 +29,7 @@ public class MainActivity extends ActionBarActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
@@ -70,7 +71,7 @@ public class MainActivity extends ActionBarActivity {
 			}
 		});
 
-		checkDeviceStatus();
+		getDeviceStatus();
 	}
 
 	private void registerDevice(final String deviceId) {
@@ -140,10 +141,15 @@ public class MainActivity extends ActionBarActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	public void updateDeviceStatus(DeviceStatus result) {
+	public void updateDeviceInfo(Device device) {
 		loading.dismiss();
 
-		switch (result) {
+		DeviceStatus status = DeviceStatus.NOT_REGISTERED;
+		if (device != null) {
+			status = device.status;
+		}
+
+		switch (status) {
 		case NOT_REGISTERED:
 			text.setText("Device not registered yet.");
 			registerButton.setVisibility(View.VISIBLE);
@@ -152,14 +158,16 @@ public class MainActivity extends ActionBarActivity {
 			break;
 
 		case AVAILABLE:
-			text.setText("Device is available for borrow");
+			text.setText(String.format("Device %s is available for borrow",
+					device.name));
 			borrowButton.setVisibility(View.VISIBLE);
 			registerButton.setVisibility(View.INVISIBLE);
 			returnButton.setVisibility(View.INVISIBLE);
 			break;
 
 		case BORROWED:
-			text.setText("Device is borrowed");
+			text.setText(String.format("Device %s is borrowed to %s",
+					device.name, device.borrowerName));
 			returnButton.setVisibility(View.VISIBLE);
 			borrowButton.setVisibility(View.INVISIBLE);
 			registerButton.setVisibility(View.INVISIBLE);
@@ -171,11 +179,11 @@ public class MainActivity extends ActionBarActivity {
 
 	}
 
-	public void checkDeviceStatus() {
+	public void getDeviceStatus() {
 
 		loading.show();
 		String deviceId = Secure.getString(getContentResolver(),
 				Secure.ANDROID_ID);
-		new CheckDeviceStatusTask(this).execute(SERVER_HOST, deviceId);
+		new GetDeviceTask(this).execute(SERVER_HOST, deviceId);
 	}
 }

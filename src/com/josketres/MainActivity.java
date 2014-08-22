@@ -21,12 +21,13 @@ public class MainActivity extends ActionBarActivity {
 	static final String TAG = "DevicesCatalogClient";
 
 	private TextView text;
+	private TextView serverLabel;
 	private ProgressDialog loading;
 	private Button registerButton;
 	private Button borrowButton;
 	private Button returnButton;
 
-	private String server = "example.com:8000";
+	private String server = "example.com:8080";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,7 @@ public class MainActivity extends ActionBarActivity {
 		setContentView(R.layout.activity_main);
 
 		text = (TextView) findViewById(R.id.text);
+		serverLabel = (TextView) findViewById(R.id.serverLabel);
 		registerButton = (Button) findViewById(R.id.registerButton);
 		borrowButton = (Button) findViewById(R.id.borrowButton);
 		returnButton = (Button) findViewById(R.id.returnButton);
@@ -42,6 +44,8 @@ public class MainActivity extends ActionBarActivity {
 		loading = new ProgressDialog(this);
 		loading.setMessage("Loading...");
 		loading.setCancelable(false);
+
+		updateServerLabelText();
 
 		final String deviceId = Secure.getString(getContentResolver(),
 				Secure.ANDROID_ID);
@@ -73,6 +77,10 @@ public class MainActivity extends ActionBarActivity {
 		});
 
 		getDeviceStatus();
+	}
+
+	private void updateServerLabelText() {
+		serverLabel.setText("Using server:\r\n" + server);
 	}
 
 	private void registerDevice(final String deviceId) {
@@ -155,6 +163,7 @@ public class MainActivity extends ActionBarActivity {
 						server = input.getText().toString();
 						Toast.makeText(getApplicationContext(),
 								"Server updated", Toast.LENGTH_SHORT).show();
+						updateServerLabelText();
 						getDeviceStatus();
 					}
 				})

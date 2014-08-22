@@ -14,18 +14,19 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
 
 	static final String TAG = "DevicesCatalogClient";
-
-	private static final String SERVER_HOST = "devstation19.office.tipp24.de:8000";
 
 	private TextView text;
 	private ProgressDialog loading;
 	private Button registerButton;
 	private Button borrowButton;
 	private Button returnButton;
+
+	private String server = "example.com:8000";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +67,7 @@ public class MainActivity extends ActionBarActivity {
 			@Override
 			public void onClick(View v) {
 				loading.show();
-				new ReturnDeviceTask(MainActivity.this).execute(SERVER_HOST,
+				new ReturnDeviceTask(MainActivity.this).execute(server,
 						deviceId);
 			}
 		});
@@ -86,7 +87,7 @@ public class MainActivity extends ActionBarActivity {
 						Editable deviceName = input.getText();
 						loading.show();
 						new RegisterDeviceTask(MainActivity.this).execute(
-								SERVER_HOST, deviceId, deviceName.toString());
+								server, deviceId, deviceName.toString());
 					}
 				})
 				.setNegativeButton("Cancel",
@@ -109,8 +110,8 @@ public class MainActivity extends ActionBarActivity {
 					public void onClick(DialogInterface dialog, int whichButton) {
 						Editable borrowerName = input.getText();
 						loading.show();
-						new BorrowDeviceTask(MainActivity.this).execute(
-								SERVER_HOST, deviceId, borrowerName.toString());
+						new BorrowDeviceTask(MainActivity.this).execute(server,
+								deviceId, borrowerName.toString());
 					}
 				})
 				.setNegativeButton("Cancel",
@@ -136,9 +137,34 @@ public class MainActivity extends ActionBarActivity {
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
+			openSettingsDialog();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	private void openSettingsDialog() {
+		final EditText input = new EditText(MainActivity.this);
+		input.setText(server);
+		new AlertDialog.Builder(MainActivity.this)
+				.setTitle("Settings")
+				.setMessage("Configure server:")
+				.setView(input)
+				.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						server = input.getText().toString();
+						Toast.makeText(getApplicationContext(),
+								"Server updated", Toast.LENGTH_SHORT).show();
+						getDeviceStatus();
+					}
+				})
+				.setNegativeButton("Cancel",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+								// Do nothing.
+							}
+						}).show();
 	}
 
 	public void updateDeviceInfo(Device device) {
@@ -184,6 +210,6 @@ public class MainActivity extends ActionBarActivity {
 		loading.show();
 		String deviceId = Secure.getString(getContentResolver(),
 				Secure.ANDROID_ID);
-		new GetDeviceTask(this).execute(SERVER_HOST, deviceId);
+		new GetDeviceTask(this).execute(server, deviceId);
 	}
 }
